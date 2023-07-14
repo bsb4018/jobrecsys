@@ -1,0 +1,21 @@
+user_drop_columns:
+- 'City'
+- 'State'
+- 'Country'
+- 'ZipCode'
+- 'Major'
+- 'GraduationDate'
+- 'WorkHistoryCount'
+- 'CurrentlyEmployed'
+- 'ManagedOthers'
+- 'ManagedHowMany'
+
+jobs_drop_columns:
+- 'Description'
+- 'Requirements'
+
+apps_drop_columns:
+- 'ApplicationDate'
+
+final_drop_columns:
+- 'Split'
