@@ -46,3 +46,17 @@ class DataValidationConfig:
         self.valid_test_apps_file_name: str = os.path.join(
             self.data_valdiation_dir, DATA_VALIDATION_TEST_APPS_FILE_NAME
         )
+
+
+class DataTransformationConfig:
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.data_transformation_dir: str = os.path.join(
+                training_pipeline_config.artifact_dir, DATA_TRANSFORMATION_DIR_NAME
+        )
+        self.valid_transform_train_file_name: str = os.path.join(
+            self.data_transformation_dir, DATA_TRANSFORMATION_TRAIN_FILE_NAME
+        )
+        self.valid_transform_test_file_name: str = os.path.join(
+            self.data_transformation_dir, DATA_TRANSFORMATION_TEST_FILE_NAME
+        )
+    
