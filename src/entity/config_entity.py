@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from src.constants.train_constant import *
+from src.constants.train_constants import *
 
 class TrainingPipelineConfig:
     def __init__(self,timestamp=datetime.now()):
@@ -53,10 +53,12 @@ class DataTransformationConfig:
         self.data_transformation_dir: str = os.path.join(
                 training_pipeline_config.artifact_dir, DATA_TRANSFORMATION_DIR_NAME
         )
-        self.valid_transform_train_file_name: str = os.path.join(
+        self.transformed_train_applications_file_name: str = os.path.join(
             self.data_transformation_dir, DATA_TRANSFORMATION_TRAIN_FILE_NAME
         )
-        self.valid_transform_test_file_name: str = os.path.join(
+        self.transformed_test_applications_file_name: str = os.path.join(
             self.data_transformation_dir, DATA_TRANSFORMATION_TEST_FILE_NAME
         )
-    
+        self.transformed_jobs_file_name: str = os.path.join(
+            self.data_transformation_dir, DATA_TRANSFORMATION_JOBS_FILE_NAME
+        )

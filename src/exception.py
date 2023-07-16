@@ -1,30 +1,30 @@
-import os
 import sys
 
 class JobRecException(Exception):
-
-    def __init__(self, error_message: Exception, error_detail: sys):
+    def __init__(self, error_message, error_detail):
+        """
+        new ToxicityException
+        :param error_message: error message in string format
+        """
         super().__init__(error_message)
-        self.error_message = JobRecException.get_detailed_error_message(error_message=error_message,
-                                                                         error_detail=error_detail
-                                                                         )
+        self.error_message = error_message_detail(error_message,\
+            error_detail=error_detail)
 
-    @staticmethod
-    def get_detailed_error_message(error_message: Exception, error_detail: sys) -> str:
-        """
-        error_message: Exception object
-        error_detail: object of sys module
-        """
-        _, _, exec_tb = error_detail.exc_info()
-        try_block_line_number = exec_tb.tb_lineno
-        file_name = exec_tb.tb_frame.f_code.co_filename
-        error_message = f"Error occurred in script: [ {file_name} ] at line number: [{try_block_line_number}] error " \
-                        f"message: [{error_message}] "
-
-        return error_message
-
-    def __str__(self):
+    def __strr__(self):
         return self.error_message
 
-    def __repr__(self) -> str:
-        return str(JobRecException.__name__)
+def error_message_detail(error_message, error_detail: sys):
+    """
+    (exc_type, exc_obj, exc_tb) = (type, value, traceback).
+    type : the type of the exception being handled (a subclass of BaseException); 
+    value : exception instance (an instance of the exception type); 
+    traceback : a traceback object which encapsulates the call stack 
+    at the point where the exception originally occurred.
+    """
+    exc_type, exc_obj, exc_tb = error_detail.exc_info()
+    file_name = exc_tb.tb_frame.f_code.co_file_name #get the file name
+    error_message_detailed =  "Error occurred python script name [{0}] line number [{1}] error message [{2}]".format(
+        file_name, exc_tb.tb_lineno, str(error_message)
+    )
+
+    return error_message_detailed

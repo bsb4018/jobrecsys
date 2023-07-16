@@ -30,5 +30,6 @@ DATA_VALIDATION_TEST_APPS_FILE_NAME: str = "valid_test_apps.parquet"
 Data Transformation related constant start with DATA_TRANSFORMATION VAR NAME
 '''
 DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"
-DATA_TRANSFORMATION_TRAIN_FILE_NAME: str = "valid_train_data.parquet"
-DATA_TRANSFORMATION_TEST_FILE_NAME: str = "valid_test_data.parquet"
+DATA_TRANSFORMATION_TRAIN_FILE_NAME: str = "transformed_train_apps_data.parquet"
+DATA_TRANSFORMATION_TEST_FILE_NAME: str = "transformed_test_apps_data.parquet"
+DATA_TRANSFORMATION_JOBS_FILE_NAME: str = "transformed_jobs.parquet"

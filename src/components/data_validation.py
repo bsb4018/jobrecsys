@@ -8,7 +8,7 @@ from src.logger import logging
 from src.utils import read_yaml_file
 from src.entity.config_entity import DataValidationConfig
 from src.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
-from src.constants.file_constants import *
+from src.constants.file_constants import SCHEMA_FILE_PATH
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -38,10 +38,10 @@ class DataValidation:
             s=re_comment.sub('',s)
             blank_line=re.compile('\n+')
             s=blank_line.sub('\n',s)
-            s=self.replace(s,'\\r'," ")
-            s=self.replace(s,'\\t'," ")
-            s=self.replace(s,'\n'," ")
-            s=self.replace(s,'\\n'," ")
+            s=s.replace('\\r'," ")
+            s=s.replace('\\t'," ")
+            s=s.replace('\n'," ")
+            s=s.replace('\\n'," ")
             s = re.sub(r'(https|http)?:\/\/(\w|\.|\/|\?|\=|\&|\%)*\b', '', s, flags=re.MULTILINE)
             s = re.sub(r'[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?', '', s, flags=re.MULTILINE)
             s = re.sub(r'(www)?:\/\/(\w|\.|\/|\?|\=|\&|\%)*\b', '', s, flags=re.MULTILINE)
@@ -53,7 +53,7 @@ class DataValidation:
         except Exception as e:
             raise JobRecException(e,sys)
     
-    def replace(self,s,re_exp,repl_string):
+    def replace(s,re_exp,repl_string):
         return re_exp.sub(repl_string,s)
 
     def replaceCharEntity(self,htmlstr):
@@ -82,15 +82,16 @@ class DataValidation:
         
     def prepare_all_data(self):
         try:
+            logging.info("DATA Validation: Loading Ingested Data...")
             users = pd.read_parquet(self.data_ingestion_artifact.users_file_path)
             #do job specific work
+            logging.info("DATA Validation: Dropping NaN and unrequired Columnns")
             users = users.drop(self._schema_config["user_drop_columns"], axis=1)
             #remove nan rows
             users = users.dropna(how='any')
             unique_users_list = users.UserID.unique().tolist()
 
             jobs = pd.read_parquet(self.data_ingestion_artifact.jobs_file_path)
-            jobs = jobs.drop(self._schema_config["jobs_drop_columns"], axis=1)
             jobs = jobs.dropna(how='any')
             Description = [self.filter_tags(i) for i in jobs.Description.values]
             Requirements = [self.filter_tags(i) for i in jobs.Requirements.values]
@@ -111,7 +112,7 @@ class DataValidation:
         
     def train_test_split(self, users,jobs,apps):
         try:
-
+            logging.info("DATA Validation: Doing Train Test Split")
             train_users = users[users["Split"] == "Train"]
             test_users = users[users["Split"] == "Test"]
             train_apps = apps[apps["Split"] == "Train"]
@@ -121,33 +122,51 @@ class DataValidation:
             test_users.drop(self._schema_config["final_drop_columns"], axis=1, inplace=True)
             train_apps.drop(self._schema_config["final_drop_columns"], axis=1, inplace=True)
             test_apps.drop(self._schema_config["final_drop_columns"], axis=1, inplace=True)
+
+            #print("Data Validated")
+            #print(jobs.head(2))
+            #print("--------------")
+            #print(train_users.head(2))
+            #print("--------------")
+            #print(test_users.head(2))
+            #print("--------------")
+            #print(test_apps.head(2))
+            #print("--------------")
+            #print(test_apps.head(2))
+            #print("--------------")
             
+            logging.info("DATA Validation: Saving Validated Data")
             save_jobs_file = self.data_validation_config.valid_jobs_file_name
             dir_path = os.path.dirname(save_jobs_file)
             os.makedirs(dir_path, exist_ok=True)
-            jobs.to_parquet(dir_path, index=False)
+            #jobs.to_csv(dir_path, index=False)
+            jobs.to_parquet(save_jobs_file, engine='fastparquet',index=False)
 
             #save all three files to ingested folder under artifact in parquet format
-            save_users_file = self.data_validation_config.valid_train_users_file_name
-            dir_path = os.path.dirname(save_users_file)
+            save_users_train_file = self.data_validation_config.valid_train_users_file_name
+            dir_path = os.path.dirname(save_users_train_file)
             os.makedirs(dir_path, exist_ok=True)
-            train_users.to_parquet(dir_path, index=False)
+            #train_users.to_csv(dir_path, index=False)
+            train_users.to_parquet(save_users_train_file, engine='fastparquet',index=False)
 
             #save all three files to ingested folder under artifact in parquet format
-            save_users_file = self.data_validation_config.valid_test_users_file_name
-            dir_path = os.path.dirname(save_users_file)
+            save_users_test_file = self.data_validation_config.valid_test_users_file_name
+            dir_path = os.path.dirname(save_users_test_file)
             os.makedirs(dir_path, exist_ok=True)
-            test_users.to_parquet(dir_path, index=False)
+            #test_users.to_csv(dir_path, index=False)
+            test_users.to_parquet(save_users_test_file, engine='fastparquet',index=False)
 
-            save_apps_file = self.data_validation_config.valid_train_apps_file_name
-            dir_path = os.path.dirname(save_apps_file)
+            save_apps_train_file = self.data_validation_config.valid_train_apps_file_name
+            dir_path = os.path.dirname(save_apps_train_file)
             os.makedirs(dir_path, exist_ok=True)
-            train_apps.to_parquet(dir_path, index=False)
+            #train_apps.to_csv(dir_path, index=False)
+            train_apps.to_parquet(save_apps_train_file, engine='fastparquet',index=False)
 
-            save_apps_file = self.data_validation_config.valid_test_apps_file_name
-            dir_path = os.path.dirname(save_apps_file)
+            save_apps_test_file = self.data_validation_config.valid_test_apps_file_name
+            dir_path = os.path.dirname(save_apps_test_file)
             os.makedirs(dir_path, exist_ok=True)
-            test_apps.to_parquet(dir_path, index=False)
+            #test_apps.to_csv(dir_path, index=False)
+            test_apps.to_parquet(save_apps_test_file, engine='fastparquet',index=False)
 
         except Exception as e:
             raise JobRecException(e,sys)
@@ -160,7 +179,7 @@ class DataValidation:
             
             users,jobs,apps = self.prepare_all_data()
             self.train_test_split(users,jobs,apps)
-
+            logging.info("DATA Validation: Storing Data Validation Artifacts...")
             data_validation_artifact = DataValidationArtifact(
                 valid_train_users_file_path=self.data_validation_config.valid_train_users_file_name,
                 valid_test_users_file_path=self.data_validation_config.valid_test_users_file_name,
@@ -168,7 +187,7 @@ class DataValidation:
                 valid_train_apps_file_path=self.data_validation_config.valid_train_apps_file_name,
                 valid_test_apps_file_path=self.data_validation_config.valid_test_apps_file_name,
             )
-            logging.info(f"Data ingestion artifact: {data_validation_artifact}")
+            logging.info(f"Data Validation Artifact: {data_validation_artifact}")
             return data_validation_artifact
         
         except Exception as e:

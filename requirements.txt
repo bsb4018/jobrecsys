@@ -1,2 +1,14 @@
-scann
+#scann
 tensorflow-recommenders
+pandas
+memory-profiler
+path
+python-multipart
+dill
+fastparquet
+from-root
+pip-chill
+path
+PyYAML
+passlib
+-e.
