@@ -21,3 +21,20 @@ class DataTransformationArtifact:
     transformed_test_apps_file_path: str
     transformed_jobs_file_path: str
 
+
+@dataclass
+class ModelTrainerArtifact:
+    saved_weights_directory_path: str
+    saved_weights_file_path: str
+
+@dataclass
+class ModelEvaluationArtifact:
+    is_model_accepted: bool
+    improved_score: float
+    current_model_weights_path: str
+    current_model_report_file_path: str
+
+@dataclass
+class ModelPusherArtifact:
+    saved_model_path:str
+    model_file_path:str

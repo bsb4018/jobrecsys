@@ -151,3 +151,5 @@ app.py
 logs/
 data/
 artifact/
+memory_profile.log
+saved_models/

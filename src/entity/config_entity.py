@@ -62,3 +62,44 @@ class DataTransformationConfig:
         self.transformed_jobs_file_name: str = os.path.join(
             self.data_transformation_dir, DATA_TRANSFORMATION_JOBS_FILE_NAME
         )
+
+
+class ModelTrainerConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_training_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME
+        )
+        self.saved_model_dir: str = os.path.join(
+            self.model_training_dir, MODEL_TRAINER_MODEL_WEIGHTS_DIR_NAME
+        )
+        self.saved_checkpoint_dir: str = os.path.join(
+            self.model_training_dir, MODEL_TRAINER_MODEL_CHECKPOINTS_DIR_NAME
+        )
+        self.saved_model_weights_file_path: str = os.path.join(
+            self.saved_model_dir, MODEL_TRAINER_MODEL_WEIGHTS_FILE_NAME
+        )
+        self.saved_model_checkpoints_file_path: str = os.path.join(
+            self.saved_checkpoint_dir, MODEL_TRAINER_MODEL_CHECKPOINTS_FILE_NAME
+        )
+        self.model_epochs: int = MODEL_TRAINER_EPOCHS
+
+
+class ModelEvaluationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_evaluation_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, MODEL_EVALUATION_DIR_NAME
+        )
+        self.model_report_file_path: str = os.path.join(
+            self.model_evaluation_dir, MODEL_EVALUATION_MODEL_REPORT_FILE_NAME
+        )
+        self.model_eval_threshold_score: str = MODEL_EVALUATION_THRESHOLD_SCORE
+
+
+class ModelPusherConfig:
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.model_pusher_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, MODEL_PUSHER_DIR_NAME
+        )
+        #timestamp = round(datetime.now().timestamp())
+        #self.model_file_path = os.path.join(self.model_pusher_dir)
+        self.saved_model_path = os.path.join(SAVED_MODEL_DIR,training_pipeline_config.timestamp)
