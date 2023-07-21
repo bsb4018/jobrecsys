@@ -155,13 +155,13 @@ class TrainPipeline:
             TrainPipeline.is_pipeline_running=True
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
-            data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
-            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact)
-            model_eval_artifact = self.start_model_evaluation(data_transformation_artifact, model_trainer_artifact)
-            if not model_eval_artifact.is_model_accepted:
-                print("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
-                raise Exception("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
-            model_pusher_artifact = self.start_model_pusher(data_transformation_artifact,model_eval_artifact)
+            #data_transformation_artifact = self.start_data_transformation(data_validation_artifact=data_validation_artifact)
+            #model_trainer_artifact = self.start_model_trainer(data_transformation_artifact)
+            #model_eval_artifact = self.start_model_evaluation(data_transformation_artifact, model_trainer_artifact)
+            #if not model_eval_artifact.is_model_accepted:
+                #print("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
+                #raise Exception("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
+            #model_pusher_artifact = self.start_model_pusher(data_transformation_artifact,model_eval_artifact)
             TrainPipeline.is_pipeline_running=False
               
             logging.info("Training Pipeline Running Operation Complete")

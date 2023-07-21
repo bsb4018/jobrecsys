@@ -84,6 +84,7 @@ class DataValidation:
         try:
             logging.info("DATA Validation: Loading Ingested Data...")
             users = pd.read_parquet(self.data_ingestion_artifact.users_file_path)
+            users['WorkHistoryCount'] = users['WorkHistoryCount'].replace(120, 12)
             #do job specific work
             logging.info("DATA Validation: Dropping NaN and unrequired Columnns")
             users = users.drop(self._schema_config["user_drop_columns"], axis=1)
