@@ -130,11 +130,11 @@ class TrainPipeline:
             raise JobRecException(e,sys)
 
     @profile    
-    def start_model_pusher(self,model_evaluation_artifact:ModelEvaluationArtifact):
+    def start_model_pusher(self, data_transformation_artifact: DataTransformationArtifact, model_evaluation_artifact:ModelEvaluationArtifact):
         try:
             logging.info("Entered the start_model_pusher method of TrainPipeline class")
             model_pusher_config = ModelPusherConfig(training_pipeline_config=self.training_pipeline_config)
-            model_pusher = ModelPusher(model_pusher_config, model_evaluation_artifact)
+            model_pusher = ModelPusher(model_pusher_config, data_transformation_artifact, model_evaluation_artifact)
             model_pusher_artifact = model_pusher.initiate_model_pusher()
 
             logging.info("Performed the Model Pusher operation")
@@ -161,7 +161,7 @@ class TrainPipeline:
             if not model_eval_artifact.is_model_accepted:
                 print("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
                 raise Exception("Process Completed Succesfully. Model Trained and Evaluated but the Trained model is not better than the best model. So, we do not push this model to Production. Exiting.")
-            model_pusher_artifact = self.start_model_pusher(model_eval_artifact)
+            model_pusher_artifact = self.start_model_pusher(data_transformation_artifact,model_eval_artifact)
             TrainPipeline.is_pipeline_running=False
               
             logging.info("Training Pipeline Running Operation Complete")

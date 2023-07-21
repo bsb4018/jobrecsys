@@ -58,3 +58,5 @@ Model Pusher ralated constant start with MODEL_PUSHER VAR NAME
 '''
 MODEL_PUSHER_DIR_NAME = "model_pusher"
 MODEL_PUSHER_SAVED_MODEL_DIR = SAVED_MODEL_DIR
+MODEL_PUSHER_PRODUCTION_MODEL_FILE_NAME = "production_model"
+MODEL_PUSHER_PRODUCTION_MODEL_DATA_DIR = "production_data"

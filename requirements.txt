@@ -2,6 +2,7 @@
 tensorflow-recommenders
 pandas
 memory-profiler
+line-profiler
 path
 python-multipart
 dill

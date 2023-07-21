@@ -50,7 +50,6 @@ class ModelTrainer:
             cached_train = train.shuffle(100_000).batch(8192).cache()
             model.fit(cached_train, epochs=self.model_trainer_config.model_epochs, callbacks=[model_checkpoint], verbose=1)
             logging.info("Model Training Successfull")
-                         
 
             logging.info("Saving Model Weights")
             filepath = self.model_trainer_config.saved_model_weights_file_path
